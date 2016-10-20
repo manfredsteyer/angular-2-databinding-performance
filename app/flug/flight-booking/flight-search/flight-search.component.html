@@ -1,0 +1,75 @@
+<h1>Flug suchen!</h1>
+
+<form #f="ngForm">
+
+    <div class="form-group">
+
+        <label>Von</label>
+        <input [(ngModel)]="from" class="form-control" name="from"
+                city required minlength="3" maxlength="30">
+
+        <div *ngIf="!f?.controls?.from?.valid">
+            Es ist ein Validierungsfehler aufgetreten!
+        </div>
+
+        <div *ngIf="f?.controls?.from?.hasError('minlength')">
+            Minimal 3 Zeichen
+        </div>
+
+        <div *ngIf="f?.controls?.from?.hasError('required')">
+            Pflichtfeld
+        </div>
+
+        <div *ngIf="f?.controls?.from?.hasError('city')">
+            Diese Stadt wird nicht unterstützt! Versuchen Sie es mit Hamburg und Graz in dieser Demo-Anwendung.
+        </div>
+
+    </div>
+
+<div class="form-group">
+
+    <label>Nach</label>
+    <input [(ngModel)]="to" class="form-control" name="to">
+
+</div>
+
+
+<div class="form-group">
+
+    <button [disabled]="!f?.valid" class="btn btn-primary" (click)="search()">Suchen</button>
+    <button class="btn btn-primary" (click)="delay()">Delay</button>
+    <button class="btn btn-primary" (click)="undo()">Undo</button>
+
+</div>
+</form>
+
+<!--
+<table class="table table-striped">
+
+    <tr *ngFor="let f of flights" [class.active]="selectedFlight == f">
+        <td>{{f.id}}</td>
+        <td>{{f.from | city:'short'}}</td>
+        <td>{{f.to | city:'long'}}</td>
+        <td>{{f.date | date:'dd.MM.yyyy HH:mm'}}</td>
+        <td><a (click)="select(f)">Auswählen</a></td>
+    </tr>
+</table>
+-->
+
+<div *ngFor="let f of flights$ | async" class="col-sm-6 col-md-4 col-lg-3">
+
+    <flight-card [item]="f"
+                 [(selectedItem)]="selectedFlight">
+    </flight-card>
+
+    <!--
+    [selectedItem]="selectedFlight"
+                 (selectedItemChange)="selectedFlight = $event"
+    -->
+</div>
+
+
+<pre>Warenkorb
+---------------------
+{{selectedFlight | json}}
+</pre>
